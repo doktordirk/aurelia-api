@@ -1,12 +1,13 @@
 import {HttpClient} from 'aurelia-fetch-client';
 import {Rest} from './rest';
+import {CrudRestClient} from './crud-rest-client';
 
 /**
  * Config class. Configures and stores endpoints
  */
-export class Config {
+export class ApiConfig {
   /**
-   * Collection of configures endpionts
+   * Collection of configured endpoints
    * @param {Object} Key: endpoint name, value: Rest client
    */
   endpoints       = {};
@@ -16,6 +17,12 @@ export class Config {
    * @param {[Rest]} Default Rest client
    */
   defaultEndpoint = null;
+
+  /**
+   * Collection of Crud Rest Clients for the corresponding rest endpoints
+   * @param {Object} Key: endpoint name, value: CrudRestClient
+   */
+  crudClients       = {};
 
   /**
    * Register a new endpoint.
@@ -28,8 +35,9 @@ export class Config {
    * @return {Config}
    */
   registerEndpoint(name, configureMethod, defaults) {
-    let newClient        = new HttpClient();
-    this.endpoints[name] = new Rest(newClient, name);
+    let newClient          = new HttpClient();
+    this.endpoints[name]   = new Rest(newClient, name);
+    this.crudClients[name] = new CrudRestClient(this.endpoints[name], name);
 
     // set custom defaults to Rest
     if (defaults !== undefined) this.endpoints[name].defaults = defaults;

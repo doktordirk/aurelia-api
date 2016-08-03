@@ -81,7 +81,7 @@ export class Rest {
   }
 
   /**
-   * Update a resource.
+   * Update a resource. As default uses 'put'. You can map it to 'patch', if you desired.
    *
    * @param {string}           resource  Resource to update
    * @param {{}|string|Number} criteria  Object for where clause, string / number for id.
@@ -91,6 +91,20 @@ export class Rest {
    * @return {Promise<Object>|Promise<Error>} Server response as Object
    */
   update(resource, criteria, body, options) {
+    return this.put(...arguments);
+  }
+
+  /**
+   * Patch a resource.
+   *
+   * @param {string}           resource  Resource to patch
+   * @param {{}|string|Number} criteria  Object for where clause, string / number for id.
+   * @param {object}           body      Data to patch for provided criteria.
+   * @param {{}}               [options] Extra fetch options.
+   *
+   * @return {Promise<Object>|Promise<Error>} Server response as Object
+   */
+  put(resource, criteria, body, options) {
     return this.request('PUT', getRequestPath(resource, criteria), body, options);
   }
 
