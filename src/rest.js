@@ -1,6 +1,6 @@
 import {buildQueryString, join} from 'aurelia-path';
 import {HttpClient} from 'aurelia-fetch-client';
-import extend from 'extend';
+import * as extend from 'extend';
 
 /**
  * Rest class. A simple rest client to fetch resources
@@ -12,11 +12,11 @@ export class Rest {
    *
    * @param {{}} defaults The fetch client options
    */
-  defaults: {} = {
-    headers: {
+  defaults: {headers: Headers} = {
+    headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json'
-    }
+    })
   };
 
   /**
@@ -68,7 +68,7 @@ export class Rest {
 
     return this.client.fetch(path, requestOptions).then(response => {
       if (response.status >= 200 && response.status < 400) {
-        return response.json().catch(error => null);
+        return response.json().catch(() => null);
       }
 
       throw response;
@@ -210,11 +210,11 @@ export class Rest {
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
   create(resource: string, body?: {}, options?: {}): Promise<any|Error> {
-    return this.post(...arguments);
+    return this.post(resource, body, options);
   }
 }
 
-function getRequestPath(resource: string, idOrCriteria: string|Number|{}, criteria?: {}) {
+function getRequestPath(resource: string, idOrCriteria?: string|Number|{}, criteria?: {}) {
   let hasSlash = resource.slice(-1) === '/';
 
   if (typeof idOrCriteria === 'string' || typeof idOrCriteria === 'number') {

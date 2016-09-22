@@ -10,22 +10,22 @@ export class Config {
    *
    * @param {{}} Key: endpoint name, value: Rest client
    */
-  endpoints: {} = {};
+  endpoints: {[key: string]: Rest} = {};
 
   /**
    * Current default endpoint if set
    *
-   * @param {Rest|null} defaultEndpoint The Rest client
+   * @param {Rest} defaultEndpoint The Rest client
    */
-  defaultEndpoint: Rest = null;
+  defaultEndpoint: Rest;
 
 
    /**
     * Current default baseUrl if set
     *
-    * @ param {string|null} defaultBaseUrl The Rest client
+    * @ param {string} defaultBaseUrl The Rest client
     */
-  defaultBaseUrl: string = null;
+  defaultBaseUrl: string;
 
   /**
    * Register a new endpoint.
@@ -38,7 +38,7 @@ export class Config {
    * @return {Config}
    * @chainable
    */
-  registerEndpoint(name: string, configureMethod?: string|Function, defaults?: {}): Config {
+  registerEndpoint(name: string, configureMethod?: string|Function, defaults?: {headers: Headers}): Config {
     let newClient        = new HttpClient();
     this.endpoints[name] = new Rest(newClient, name);
 
@@ -69,7 +69,7 @@ export class Config {
 
     // Base url is string. Configure.
     newClient.configure(configure => {
-      configure.withBaseUrl(configureMethod);
+      configure.withBaseUrl(String(configureMethod));
     });
 
     return this;
@@ -138,7 +138,7 @@ export class Config {
    * @return {Config}
    * @chainable
    */
-  configure(config: {}): Config {
+  configure(config: {defaultEndpoint: string, defaultBaseUrl: string, endpoints: Array<{name: string, endpoint: string, config: {headers: Headers}, default: boolean}>}): Config {
     if (config.defaultBaseUrl) {
       this.defaultBaseUrl = config.defaultBaseUrl;
     }
