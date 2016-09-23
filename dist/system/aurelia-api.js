@@ -3,7 +3,7 @@
 System.register(['extend', 'aurelia-path', 'aurelia-fetch-client', 'aurelia-dependency-injection'], function (_export, _context) {
   "use strict";
 
-  var extend, buildQueryString, join, HttpClient, RequestInit, Headers, Container, resolver, _dec, _class4, _typeof, Rest, DefaultRest, Config, Endpoint;
+  var extend, buildQueryString, join, HttpClient, RequestInit, Container, resolver, _dec, _class4, _typeof, Rest, DefaultRest, Config, Endpoint;
 
   function _possibleConstructorReturn(self, call) {
     if (!self) {
@@ -70,7 +70,6 @@ System.register(['extend', 'aurelia-path', 'aurelia-fetch-client', 'aurelia-depe
     }, function (_aureliaFetchClient) {
       HttpClient = _aureliaFetchClient.HttpClient;
       RequestInit = _aureliaFetchClient.RequestInit;
-      Headers = _aureliaFetchClient.Headers;
     }, function (_aureliaDependencyInjection) {
       Container = _aureliaDependencyInjection.Container;
       resolver = _aureliaDependencyInjection.resolver;

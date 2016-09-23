@@ -1,5 +1,5 @@
 import {buildQueryString} from 'aurelia-path';
-import {HttpClient, RequestInit, Headers} from 'aurelia-fetch-client';
+import {HttpClient, RequestInit} from 'aurelia-fetch-client';
 import extend from 'extend';
 import {Rest} from './rest';
 

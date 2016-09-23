@@ -10,7 +10,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 import extend from 'extend';
 import { buildQueryString, join } from 'aurelia-path';
-import { HttpClient, RequestInit, Headers } from 'aurelia-fetch-client';
+import { HttpClient, RequestInit } from 'aurelia-fetch-client';
 import { Container, resolver } from 'aurelia-dependency-injection';
 
 export var Rest = function () {

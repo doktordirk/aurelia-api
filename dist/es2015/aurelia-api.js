@@ -2,7 +2,7 @@ var _dec, _class4;
 
 import extend from 'extend';
 import { buildQueryString, join } from 'aurelia-path';
-import { HttpClient, RequestInit, Headers } from 'aurelia-fetch-client';
+import { HttpClient, RequestInit } from 'aurelia-fetch-client';
 import { Container, resolver } from 'aurelia-dependency-injection';
 
 export let Rest = class Rest {
