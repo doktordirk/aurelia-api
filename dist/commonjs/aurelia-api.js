@@ -111,10 +111,10 @@ var DefaultRest = exports.DefaultRest = function (_Rest) {
     var _this = _possibleConstructorReturn(this, _Rest.call(this, httpClient, endpoint));
 
     _this.defaults = {
-      headers: {
+      headers: new _aureliaFetchClient.Headers({
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-      }
+      })
     };
     return _this;
   }

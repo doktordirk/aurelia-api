@@ -1,5 +1,5 @@
 import {buildQueryString} from 'aurelia-path';
-import {HttpClient, RequestInit} from 'aurelia-fetch-client';
+import {HttpClient, RequestInit, Headers} from 'aurelia-fetch-client';
 import extend from 'extend';
 import {Rest} from './rest';
 
@@ -14,17 +14,17 @@ export class DefaultRest extends Rest {
    * @param {RequestInit} defaults The default fetch client RequestInit
    */
   defaults: RequestInit = {
-    headers: {
+    headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json'
-    }
+    })
   };
 
   /**
    * Inject the httpClient to use for requests.
    *
    * @param {HttpClient} httpClient The httpClient to use
-   * @param {string}     [endpoint] The endpoint name
+   * @param {string}     endpoint   The endpoint name
    */
   constructor(httpClient: HttpClient, endpoint: string) {
     super(httpClient, endpoint);
@@ -40,7 +40,7 @@ export class DefaultRest extends Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  request(method: string, path: string, body?: Body, options?: RequestInit): Promise<{}|Error> {
+  request(method: string, path: string, body?: Body, options?: RequestInit): Promise<any|Error> {
     let requestOptions = extend(true, {headers: {}}, this.defaults, options || {}, {method, body});
 
     let contentType = requestOptions.headers['Content-Type'] || requestOptions.headers['content-type'];

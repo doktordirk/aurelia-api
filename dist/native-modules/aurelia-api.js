@@ -10,7 +10,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 import extend from 'extend';
 import { buildQueryString, join } from 'aurelia-path';
-import { HttpClient, RequestInit } from 'aurelia-fetch-client';
+import { HttpClient, RequestInit, Headers } from 'aurelia-fetch-client';
 import { Container, resolver } from 'aurelia-dependency-injection';
 
 export var Rest = function () {
@@ -95,10 +95,10 @@ export var DefaultRest = function (_Rest) {
     var _this = _possibleConstructorReturn(this, _Rest.call(this, httpClient, endpoint));
 
     _this.defaults = {
-      headers: {
+      headers: new Headers({
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-      }
+      })
     };
     return _this;
   }

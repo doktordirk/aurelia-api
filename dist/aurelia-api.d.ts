@@ -1,5 +1,5 @@
 import {buildQueryString,join} from 'aurelia-path';
-import {HttpClient,RequestInit} from 'aurelia-fetch-client';
+import {HttpClient,RequestInit,Headers} from 'aurelia-fetch-client';
 import {Container,resolver} from 'aurelia-dependency-injection';
 
 /**
@@ -47,7 +47,7 @@ export declare class Rest {
      *
      * @return {Promise<any>|Promise<Error>} Server response as Object
      */
-  request(method: string, path: string, body?: any, options?: any): Promise<{} | Error>;
+  request(method: string, path: string, body?: any, options?: any): Promise<any | Error>;
   
   /**
      * Find a resource.
@@ -58,7 +58,7 @@ export declare class Rest {
      *
      * @return {Promise<any>|Promise<Error>} Server response as Object
      */
-  find(resource: string, criteria?: {} | string | Number, options?: any): Promise<{} | Error>;
+  find(resource: string, criteria?: {} | string | Number, options?: any): Promise<any | Error>;
   
   /**
      * Find a resource.
@@ -70,7 +70,7 @@ export declare class Rest {
      *
      * @return {Promise<any>|Promise<Error>} Server response as Object
      */
-  findOne(resource: string, id: string | Number, criteria?: {}, options?: any): Promise<{} | Error>;
+  findOne(resource: string, id: string | Number, criteria?: {}, options?: any): Promise<any | Error>;
   
   /**
      * Create a new instance for resource.
@@ -81,7 +81,7 @@ export declare class Rest {
      *
      * @return {Promise<any>|Promise<Error>} Server response as Object
      */
-  post(resource: string, body?: any, options?: any): Promise<{} | Error>;
+  post(resource: string, body?: any, options?: any): Promise<any | Error>;
   
   /**
      * Update a resource.
@@ -93,7 +93,7 @@ export declare class Rest {
      *
      * @return {Promise<any>|Promise<Error>} Server response as Object
      */
-  update(resource: string, criteria?: {} | string | Number, body?: any, options?: any): Promise<{} | Error>;
+  update(resource: string, criteria?: {} | string | Number, body?: any, options?: any): Promise<any | Error>;
   
   /**
      * Update a resource.
@@ -106,7 +106,7 @@ export declare class Rest {
      *
      * @return {Promise<any>|Promise<Error>} Server response as Object
      */
-  updateOne(resource: string, id: string | number, criteria?: {}, body?: any, options?: any): Promise<{} | Error>;
+  updateOne(resource: string, id: string | number, criteria?: {}, body?: any, options?: any): Promise<any | Error>;
   
   /**
      * Patch a resource.
@@ -118,7 +118,7 @@ export declare class Rest {
      *
      * @return {Promise<any>|Promise<Error>} Server response as Object
      */
-  patch(resource: string, criteria?: {} | string | Number, body?: any, options?: any): Promise<{} | Error>;
+  patch(resource: string, criteria?: {} | string | Number, body?: any, options?: any): Promise<any | Error>;
   
   /**
      * Patch a resource.
@@ -131,7 +131,7 @@ export declare class Rest {
      *
      * @return {Promise<any>|Promise<Error>} Server response as Object
      */
-  patchOne(resource: string, id: string | Number, criteria?: {}, body?: any, options?: any): Promise<{} | Error>;
+  patchOne(resource: string, id: string | Number, criteria?: {}, body?: any, options?: any): Promise<any | Error>;
   
   /**
      * Delete a resource.
@@ -142,7 +142,7 @@ export declare class Rest {
      *
      * @return {Promise<any>|Promise<Error>} Server response as Object
      */
-  destroy(resource: string, criteria?: {} | string | Number, options?: any): Promise<{} | Error>;
+  destroy(resource: string, criteria?: {} | string | Number, options?: any): Promise<any | Error>;
   
   /**
      * Delete a resource.
@@ -154,7 +154,7 @@ export declare class Rest {
      *
      * @return {Promise<any>|Promise<Error>} Server response as Object
      */
-  destroyOne(resource: string, id: string | Number, criteria?: {}, options?: any): Promise<{} | Error>;
+  destroyOne(resource: string, id: string | Number, criteria?: {}, options?: any): Promise<any | Error>;
   
   /**
      * Create a new instance for resource.
@@ -165,7 +165,7 @@ export declare class Rest {
      *
      * @return {Promise<any>|Promise<Error>} Server response as Object
      */
-  create(resource: string, body?: any, options?: any): Promise<{} | Error>;
+  create(resource: string, body?: any, options?: any): Promise<any | Error>;
 }
 
 /**
@@ -184,7 +184,7 @@ export declare class DefaultRest extends Rest {
      * Inject the httpClient to use for requests.
      *
      * @param {HttpClient} httpClient The httpClient to use
-     * @param {string}     [endpoint] The endpoint name
+     * @param {string}     endpoint   The endpoint name
      */
   constructor(httpClient: HttpClient, endpoint: string);
   
@@ -198,7 +198,7 @@ export declare class DefaultRest extends Rest {
      *
      * @return {Promise<any>|Promise<Error>} Server response as Object
      */
-  request(method: string, path: string, body?: Body, options?: RequestInit): Promise<{} | Error>;
+  request(method: string, path: string, body?: Body, options?: RequestInit): Promise<any | Error>;
 }
 
 /**

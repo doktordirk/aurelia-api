@@ -1,6 +1,6 @@
 import extend from 'extend';
 import {buildQueryString,join} from 'aurelia-path';
-import {HttpClient,RequestInit} from 'aurelia-fetch-client';
+import {HttpClient,RequestInit,Headers} from 'aurelia-fetch-client';
 import {Container,resolver} from 'aurelia-dependency-injection';
 
 /**
@@ -51,7 +51,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  request(method: string, path: string, body?: any, options?: any): Promise<{}|Error> {
+  request(method: string, path: string, body?: any, options?: any): Promise<any|Error> {
     throw new Error('must implement');
   }
 
@@ -64,7 +64,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  find(resource: string, criteria?: {}|string|Number, options?: any): Promise<{}|Error> {
+  find(resource: string, criteria?: {}|string|Number, options?: any): Promise<any|Error> {
     return this.request('GET', getRequestPath(resource, criteria), undefined, options);
   }
 
@@ -78,7 +78,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  findOne(resource: string, id: string|Number, criteria?: {}, options?: any): Promise<{}|Error> {
+  findOne(resource: string, id: string|Number, criteria?: {}, options?: any): Promise<any|Error> {
     return this.request('GET', getRequestPath(resource, id, criteria), undefined, options);
   }
 
@@ -91,7 +91,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  post(resource: string, body?: any, options?: any): Promise<{}|Error> {
+  post(resource: string, body?: any, options?: any): Promise<any|Error> {
     return this.request('POST', resource, body, options);
   }
 
@@ -105,7 +105,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  update(resource: string, criteria?: {}|string|Number, body?: any, options?: any): Promise<{}|Error> {
+  update(resource: string, criteria?: {}|string|Number, body?: any, options?: any): Promise<any|Error> {
     return this.request('PUT', getRequestPath(resource, criteria), body, options);
   }
 
@@ -120,7 +120,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  updateOne(resource: string, id: string|number, criteria?: {}, body?: any, options?: any): Promise<{}|Error> {
+  updateOne(resource: string, id: string|number, criteria?: {}, body?: any, options?: any): Promise<any|Error> {
     return this.request('PUT', getRequestPath(resource, id, criteria), body, options);
   }
 
@@ -134,7 +134,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  patch(resource: string, criteria?: {}|string|Number, body?: any, options?: any): Promise<{}|Error> {
+  patch(resource: string, criteria?: {}|string|Number, body?: any, options?: any): Promise<any|Error> {
     return this.request('PATCH', getRequestPath(resource, criteria), body, options);
   }
 
@@ -149,7 +149,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  patchOne(resource: string, id: string|Number, criteria?: {}, body?: any, options?: any): Promise<{}|Error> {
+  patchOne(resource: string, id: string|Number, criteria?: {}, body?: any, options?: any): Promise<any|Error> {
     return this.request('PATCH', getRequestPath(resource, id, criteria), body, options);
   }
 
@@ -162,7 +162,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  destroy(resource: string, criteria?: {}|string|Number, options?: any): Promise<{}|Error> {
+  destroy(resource: string, criteria?: {}|string|Number, options?: any): Promise<any|Error> {
     return this.request('DELETE', getRequestPath(resource, criteria), undefined, options);
   }
 
@@ -176,7 +176,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  destroyOne(resource: string, id: string|Number, criteria?: {}, options?: any): Promise<{}|Error> {
+  destroyOne(resource: string, id: string|Number, criteria?: {}, options?: any): Promise<any|Error> {
     return this.request('DELETE', getRequestPath(resource, id, criteria), undefined, options);
   }
 
@@ -189,7 +189,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  create(resource: string, body?: any, options?: any): Promise<{}|Error> {
+  create(resource: string, body?: any, options?: any): Promise<any|Error> {
     return this.post(resource, body, options);
   }
 }
@@ -223,17 +223,17 @@ export class DefaultRest extends Rest {
    * @param {RequestInit} defaults The default fetch client RequestInit
    */
   defaults: RequestInit = {
-    headers: {
+    headers: new Headers({
       'Accept': 'application/json',
       'Content-Type': 'application/json'
-    }
+    })
   };
 
   /**
    * Inject the httpClient to use for requests.
    *
    * @param {HttpClient} httpClient The httpClient to use
-   * @param {string}     [endpoint] The endpoint name
+   * @param {string}     endpoint   The endpoint name
    */
   constructor(httpClient: HttpClient, endpoint: string) {
     super(httpClient, endpoint);
@@ -249,7 +249,7 @@ export class DefaultRest extends Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  request(method: string, path: string, body?: Body, options?: RequestInit): Promise<{}|Error> {
+  request(method: string, path: string, body?: Body, options?: RequestInit): Promise<any|Error> {
     let requestOptions = extend(true, {headers: {}}, this.defaults, options || {}, {method, body});
 
     let contentType = requestOptions.headers['Content-Type'] || requestOptions.headers['content-type'];

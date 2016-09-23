@@ -2,7 +2,7 @@ var _dec, _class4;
 
 import extend from 'extend';
 import { buildQueryString, join } from 'aurelia-path';
-import { HttpClient, RequestInit } from 'aurelia-fetch-client';
+import { HttpClient, RequestInit, Headers } from 'aurelia-fetch-client';
 import { Container, resolver } from 'aurelia-dependency-injection';
 
 export let Rest = class Rest {
@@ -78,10 +78,10 @@ export let DefaultRest = class DefaultRest extends Rest {
   constructor(httpClient, endpoint) {
     super(httpClient, endpoint);
     this.defaults = {
-      headers: {
+      headers: new Headers({
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-      }
+      })
     };
   }
 

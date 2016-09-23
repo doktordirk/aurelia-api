@@ -48,7 +48,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  request(method: string, path: string, body?: any, options?: any): Promise<{}|Error> {
+  request(method: string, path: string, body?: any, options?: any): Promise<any|Error> {
     throw new Error('must implement');
   }
 
@@ -61,7 +61,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  find(resource: string, criteria?: {}|string|Number, options?: any): Promise<{}|Error> {
+  find(resource: string, criteria?: {}|string|Number, options?: any): Promise<any|Error> {
     return this.request('GET', getRequestPath(resource, criteria), undefined, options);
   }
 
@@ -75,7 +75,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  findOne(resource: string, id: string|Number, criteria?: {}, options?: any): Promise<{}|Error> {
+  findOne(resource: string, id: string|Number, criteria?: {}, options?: any): Promise<any|Error> {
     return this.request('GET', getRequestPath(resource, id, criteria), undefined, options);
   }
 
@@ -88,7 +88,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  post(resource: string, body?: any, options?: any): Promise<{}|Error> {
+  post(resource: string, body?: any, options?: any): Promise<any|Error> {
     return this.request('POST', resource, body, options);
   }
 
@@ -102,7 +102,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  update(resource: string, criteria?: {}|string|Number, body?: any, options?: any): Promise<{}|Error> {
+  update(resource: string, criteria?: {}|string|Number, body?: any, options?: any): Promise<any|Error> {
     return this.request('PUT', getRequestPath(resource, criteria), body, options);
   }
 
@@ -117,7 +117,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  updateOne(resource: string, id: string|number, criteria?: {}, body?: any, options?: any): Promise<{}|Error> {
+  updateOne(resource: string, id: string|number, criteria?: {}, body?: any, options?: any): Promise<any|Error> {
     return this.request('PUT', getRequestPath(resource, id, criteria), body, options);
   }
 
@@ -131,7 +131,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  patch(resource: string, criteria?: {}|string|Number, body?: any, options?: any): Promise<{}|Error> {
+  patch(resource: string, criteria?: {}|string|Number, body?: any, options?: any): Promise<any|Error> {
     return this.request('PATCH', getRequestPath(resource, criteria), body, options);
   }
 
@@ -146,7 +146,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  patchOne(resource: string, id: string|Number, criteria?: {}, body?: any, options?: any): Promise<{}|Error> {
+  patchOne(resource: string, id: string|Number, criteria?: {}, body?: any, options?: any): Promise<any|Error> {
     return this.request('PATCH', getRequestPath(resource, id, criteria), body, options);
   }
 
@@ -159,7 +159,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  destroy(resource: string, criteria?: {}|string|Number, options?: any): Promise<{}|Error> {
+  destroy(resource: string, criteria?: {}|string|Number, options?: any): Promise<any|Error> {
     return this.request('DELETE', getRequestPath(resource, criteria), undefined, options);
   }
 
@@ -173,7 +173,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  destroyOne(resource: string, id: string|Number, criteria?: {}, options?: any): Promise<{}|Error> {
+  destroyOne(resource: string, id: string|Number, criteria?: {}, options?: any): Promise<any|Error> {
     return this.request('DELETE', getRequestPath(resource, id, criteria), undefined, options);
   }
 
@@ -186,7 +186,7 @@ export class Rest {
    *
    * @return {Promise<any>|Promise<Error>} Server response as Object
    */
-  create(resource: string, body?: any, options?: any): Promise<{}|Error> {
+  create(resource: string, body?: any, options?: any): Promise<any|Error> {
     return this.post(resource, body, options);
   }
 }
