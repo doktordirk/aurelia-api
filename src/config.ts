@@ -1,10 +1,12 @@
 import {HttpClient, RequestInit} from 'aurelia-fetch-client';
 import {Rest} from './rest';
+import {DefaultRest} from './default-rest';
 
 /**
  * Config class. Configures and stores endpoints
  */
 export class Config {
+  private RestType: { new(...args: any[]): Rest } = DefaultRest;
   /**
    * Collection of configures endpionts
    *
@@ -40,7 +42,7 @@ export class Config {
    */
   registerEndpoint(name: string, configureMethod?: string|Function, defaults?: RequestInit): Config {
     let newClient        = new HttpClient();
-    this.endpoints[name] = new Rest(newClient, name);
+    this.endpoints[name] = new this.RestType(newClient, name);
 
     // set custom defaults to Rest
     if (defaults !== undefined) {
