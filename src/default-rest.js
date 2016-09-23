@@ -1,12 +1,12 @@
 import {buildQueryString} from 'aurelia-path';
 import {HttpClient, RequestInit} from 'aurelia-fetch-client';
-import * as extend from 'extend';
+import extend from 'extend';
 import {Rest} from './rest';
 
 /**
  * Rest class. A simple rest client to fetch resources
  */
-export class DefaultRest extends Rest{
+export class DefaultRest extends Rest {
 
   /**
    * The defaults to apply to any request
@@ -14,10 +14,10 @@ export class DefaultRest extends Rest{
    * @param {RequestInit} defaults The default fetch client RequestInit
    */
   defaults: RequestInit = {
-    headers: new Headers({
+    headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
-    })
+    }
   };
 
   /**

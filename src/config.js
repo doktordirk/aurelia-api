@@ -1,14 +1,16 @@
-import {HttpClient} from 'aurelia-fetch-client';
+import {HttpClient, RequestInit} from 'aurelia-fetch-client';
 import {Rest} from './rest';
+import {DefaultRest} from './default-rest';
 
 /**
  * Config class. Configures and stores endpoints
  */
 export class Config {
+  RestType = DefaultRest;
   /**
    * Collection of configures endpionts
    *
-   * @param {{}} Key: endpoint name, value: Rest client
+   * @param {{}} Key: endpoint name; value: Rest client
    */
   endpoints: {[key: string]: Rest} = {};
 
@@ -38,9 +40,9 @@ export class Config {
    * @return {Config}
    * @chainable
    */
-  registerEndpoint(name: string, configureMethod?: string|Function, defaults?: {headers: Headers}): Config {
+  registerEndpoint(name: string, configureMethod?: string|Function, defaults?: RequestInit): Config {
     let newClient        = new HttpClient();
-    this.endpoints[name] = new Rest(newClient, name);
+    this.endpoints[name] = new this.RestType(newClient, name);
 
     // set custom defaults to Rest
     if (defaults !== undefined) {
@@ -138,7 +140,7 @@ export class Config {
    * @return {Config}
    * @chainable
    */
-  configure(config: {defaultEndpoint: string, defaultBaseUrl: string, endpoints: Array<{name: string, endpoint: string, config: {headers: Headers}, default: boolean}>}): Config {
+  configure(config: {defaultEndpoint: string, defaultBaseUrl: string, endpoints: Array<{name: string, endpoint: string, config: RequestInit, default: boolean}>}): Config {
     if (config.defaultBaseUrl) {
       this.defaultBaseUrl = config.defaultBaseUrl;
     }

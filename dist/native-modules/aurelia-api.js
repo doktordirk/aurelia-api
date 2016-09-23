@@ -1,48 +1,28 @@
-var _dec, _class3;
+var _dec, _class4;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 
 
 import extend from 'extend';
 import { buildQueryString, join } from 'aurelia-path';
-import { HttpClient } from 'aurelia-fetch-client';
-import { Aurelia } from 'aurelia-framework';
+import { HttpClient, RequestInit } from 'aurelia-fetch-client';
 import { Container, resolver } from 'aurelia-dependency-injection';
 
 export var Rest = function () {
-  function Rest(httpClient, endpoint) {
+  function Rest(client, endpoint) {
     
 
-    this.defaults = {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    };
-
-    this.client = httpClient;
+    this.client = client;
     this.endpoint = endpoint;
   }
 
   Rest.prototype.request = function request(method, path, body, options) {
-    var requestOptions = extend(true, { headers: {} }, this.defaults, options || {}, { method: method, body: body });
-
-    var contentType = requestOptions.headers['Content-Type'] || requestOptions.headers['content-type'];
-
-    if ((typeof body === 'undefined' ? 'undefined' : _typeof(body)) === 'object' && body !== null && contentType) {
-      requestOptions.body = contentType.toLowerCase() === 'application/json' ? JSON.stringify(body) : buildQueryString(body);
-    }
-
-    return this.client.fetch(path, requestOptions).then(function (response) {
-      if (response.status >= 200 && response.status < 400) {
-        return response.json().catch(function (error) {
-          return null;
-        });
-      }
-
-      throw response;
-    });
+    throw new Error('must implement');
   };
 
   Rest.prototype.find = function find(resource, criteria, options) {
@@ -82,7 +62,7 @@ export var Rest = function () {
   };
 
   Rest.prototype.create = function create(resource, body, options) {
-    return this.post.apply(this, arguments);
+    return this.post(resource, body, options);
   };
 
   return Rest;
@@ -106,20 +86,59 @@ function getRequestPath(resource, idOrCriteria, criteria) {
   return resource;
 }
 
+export var DefaultRest = function (_Rest) {
+  _inherits(DefaultRest, _Rest);
+
+  function DefaultRest(httpClient, endpoint) {
+    
+
+    var _this = _possibleConstructorReturn(this, _Rest.call(this, httpClient, endpoint));
+
+    _this.defaults = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+    return _this;
+  }
+
+  DefaultRest.prototype.request = function request(method, path, body, options) {
+    var requestOptions = extend(true, { headers: {} }, this.defaults, options || {}, { method: method, body: body });
+
+    var contentType = requestOptions.headers['Content-Type'] || requestOptions.headers['content-type'];
+
+    if ((typeof body === 'undefined' ? 'undefined' : _typeof(body)) === 'object' && body !== null && contentType) {
+      requestOptions.body = contentType.toLowerCase() === 'application/json' ? JSON.stringify(body) : buildQueryString(body);
+    }
+
+    return this.client.fetch(path, requestOptions).then(function (response) {
+      if (response.status >= 200 && response.status < 400) {
+        return response.json().catch(function () {
+          return null;
+        });
+      }
+
+      throw response;
+    });
+  };
+
+  return DefaultRest;
+}(Rest);
+
 export var Config = function () {
   function Config() {
     
 
+    this.RestType = DefaultRest;
     this.endpoints = {};
-    this.defaultEndpoint = null;
-    this.defaultBaseUrl = null;
   }
 
   Config.prototype.registerEndpoint = function registerEndpoint(name, configureMethod, defaults) {
-    var _this = this;
+    var _this2 = this;
 
     var newClient = new HttpClient();
-    this.endpoints[name] = new Rest(newClient, name);
+    this.endpoints[name] = new this.RestType(newClient, name);
 
     if (defaults !== undefined) {
       this.endpoints[name].defaults = defaults;
@@ -137,14 +156,14 @@ export var Config = function () {
 
     if (this.defaultBaseUrl && typeof configureMethod !== 'string' && typeof configureMethod !== 'function') {
       newClient.configure(function (configure) {
-        configure.withBaseUrl(_this.defaultBaseUrl);
+        configure.withBaseUrl(_this2.defaultBaseUrl);
       });
 
       return this;
     }
 
     newClient.configure(function (configure) {
-      configure.withBaseUrl(configureMethod);
+      configure.withBaseUrl(String(configureMethod));
     });
 
     return this;
@@ -174,16 +193,42 @@ export var Config = function () {
     return this;
   };
 
+  Config.prototype.configure = function configure(config) {
+    var _this3 = this;
+
+    if (config.defaultBaseUrl) {
+      this.defaultBaseUrl = config.defaultBaseUrl;
+    }
+
+    config.endpoints.forEach(function (endpoint) {
+      _this3.registerEndpoint(endpoint.name, endpoint.endpoint, endpoint.config);
+
+      if (endpoint.default) {
+        _this3.setDefaultEndpoint(endpoint.name);
+      }
+    });
+
+    if (config.defaultEndpoint) {
+      this.setDefaultEndpoint(config.defaultEndpoint);
+    }
+
+    return this;
+  };
+
   return Config;
 }();
 
-export function configure(aurelia, configCallback) {
-  var config = aurelia.container.get(Config);
+export function configure(frameworkConfig, configOrConfigure) {
+  var config = frameworkConfig.container.get(Config);
 
-  configCallback(config);
+  if (typeof configOrConfigure === 'function') {
+    return configOrConfigure(config);
+  }
+
+  config.configure(configOrConfigure);
 }
 
-export var Endpoint = (_dec = resolver(), _dec(_class3 = function () {
+export var Endpoint = (_dec = resolver(), _dec(_class4 = function () {
   function Endpoint(key) {
     
 
@@ -199,4 +244,4 @@ export var Endpoint = (_dec = resolver(), _dec(_class3 = function () {
   };
 
   return Endpoint;
-}()) || _class3);
+}()) || _class4);

@@ -1,8 +1,11 @@
-import {Aurelia} from 'aurelia-framework';
+import {Container} from 'aurelia-dependency-injection';
 import {Config} from './config';
 
-export function configure(aurelia: Aurelia, configOrConfigure: Function): void {
-  let config = aurelia.container.get(Config);
+export function configure(
+  frameworkConfig: { container: Container, globalResources: (...resources: string[]) => any },
+  configOrConfigure: {defaultEndpoint: string, defaultBaseUrl: string, endpoints: Array<{name: string, endpoint: string, config: RequestInit, default: boolean}>} | ((config: Config) => void)
+) {
+  let config = frameworkConfig.container.get(Config);
 
   if (typeof configOrConfigure === 'function') {
     return configOrConfigure(config);
